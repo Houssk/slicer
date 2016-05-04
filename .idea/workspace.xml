@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b0546465-85a6-44f5-ae18-3147d283651e" name="Default" comment="">
+      <change type="DELETED" beforePath="C:\Users\Utilisateur\Desktop\slicer\img\femur3.obj" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Utilisateur\Desktop\slicer\img\femure.obj" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Utilisateur\Desktop\slicer\img\tibia.obj" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Utilisateur\Desktop\slicer\img\tibia2.obj" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Utilisateur\Desktop\slicer\img\tibia_tibiale.obj" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
     </list>
     <ignored path="slicer.iws" />
@@ -46,8 +51,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.2176278">
-              <caret line="61" column="73" selection-start-line="61" selection-start-column="73" selection-end-line="61" selection-end-column="73" />
+            <state vertical-scroll-proportion="0.38202247">
+              <caret line="242" column="44" selection-start-line="242" selection-start-column="44" selection-end-line="242" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -240,7 +245,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="1" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -370,8 +375,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.2176278">
-          <caret line="61" column="73" selection-start-line="61" selection-start-column="73" selection-end-line="61" selection-end-column="73" />
+        <state vertical-scroll-proportion="0.38202247">
+          <caret line="242" column="44" selection-start-line="242" selection-start-column="44" selection-end-line="242" selection-end-column="44" />
           <folding />
         </state>
       </provider>

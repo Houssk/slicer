@@ -3,11 +3,12 @@ var renderer, scene, camera,geometry,controls;
 
 window.onload = init;
  var tibia_bsp;
+ var femur_bsp;
   var cube_mesh;
   var cube_bsp;
   var subtract_bsp;
-var subtract_bsp2;
   var result=null;
+var result2=null;
 
 function init() {
 
@@ -58,14 +59,17 @@ function init() {
       var cube2 = gui.addFolder('Sagittale');
       var cube3 = gui.addFolder('Pente_tibiale');
       var cube4 = gui.addFolder('Varus');
+      var cube5 = gui.addFolder('Femoral');
       var changeTibiale = cube.add(parametres,'taille').min(0.1).max(8);
       var changeSagittale = cube2.add(parametres,"taille").min(0.2).max(8);
       var changePente = cube3.add(parametres,"taille").min(0).max(15);
       var changeVarus= cube4.add(parametres,"taille").min(0).max(15);
+     var changeFemoral= cube5.add(parametres,"taille").min(0).max(5);
      cube.open();
      cube2.open();
      cube3.open();
      cube4.open();
+    cube5.open();
       
     var manager = new THREE.LoadingManager();
                 manager.onProgress = function ( item, loaded, total ) {
@@ -83,12 +87,63 @@ function init() {
                 };
    controls = new THREE.OrbitControls( camera , renderer.domElement); 
    var loader = new THREE.OBJLoader(manager);
+    var loader2 = new THREE.OBJLoader(manager);
    var coupe_tibiale = 0;
    var coupe_sagittale = 0;
    var pente = 0;
    var varus = 0 ;
 
- loader.load('img/cote_tibia4.obj',function(object){
+    loader2.load('img/femur2.obj',function(object){
+        var material = new THREE.MeshPhongMaterial({color:0x3FFFFF});
+        object.traverse( function ( child ) {
+            var texture =THREE.ImageUtils.loadTexture('texture2.png') ;
+            if ( child instanceof THREE.Mesh ) {
+                child.material = material;
+                var geometry2 = new THREE.Geometry().fromBufferGeometry(child.geometry);
+               var mesh2 = new THREE.Mesh(geometry2, child.material );
+                femur_bsp = new ThreeBSP( mesh2 );
+                changeFemoral.onChange(function(z){
+                    coupe_tibiale = z;
+                    if(result2!=null){
+                        scene.remove(result2);
+                    }
+                    var cube_geometry = new THREE.BoxGeometry( 60, 80, 15 );
+                    cube_geometry.applyMatrix( new THREE.Matrix4().makeTranslation( 30 , 40 , 7.5 ) );
+                    cube_mesh = new THREE.Mesh( cube_geometry );
+                    cube_mesh.position.z = z;
+                    cube_mesh.position.y = -25;
+                    cube_mesh.position.x = -3;
+                    var cube_geometry2 = new THREE.BoxGeometry( 60, 40, 10 );
+                    cube_geometry2.applyMatrix( new THREE.Matrix4().makeTranslation( 30 , 20 , 5 ) );
+                    var cube_mesh2 = new THREE.Mesh( cube_geometry );
+                    cube_mesh2.position.z = z+23;
+                    cube_mesh2.position.y = -29;
+                    cube_mesh2.position.x = -3;
+                    cube_mesh2.rotation.x = -(38*Math.PI)/180;
+                    cube_mesh2.rotation.y = 0.08;
+                   // scene.add(cube_mesh);
+                    cube_mesh.name ="cube_femur";
+                    var cube_bsp2 = new ThreeBSP( cube_mesh2 );
+                    cube_bsp = new ThreeBSP( cube_mesh );
+                    var union_cube = cube_bsp2.union(cube_bsp);
+                    subtract_bsp = femur_bsp.subtract( union_cube );
+                    result2 = subtract_bsp.toMesh( new THREE.MeshPhongMaterial({ shading: THREE.SmoothShading ,map: texture }) );
+                    result2.geometry.computeVertexNormals();
+                    console.log("debut d'ajout de la scene");
+                    scene.add( result2 );
+                   result2.rotation.set(-1.3,0,0);
+                    cube_geometry.dispose();
+                   scene.remove(cube_mesh);
+                    scene.remove(cube_mesh2);
+                })
+
+
+            }
+        } );
+    });
+
+
+    loader.load('img/cote_tibia4.obj',function(object){
           var material = new THREE.MeshPhongMaterial({color:0x3F3F3F});
              object.traverse( function ( child ) {
               var texture =THREE.ImageUtils.loadTexture('texture2.png') ;
@@ -99,7 +154,6 @@ function init() {
                 tibia_bsp = new ThreeBSP( mesh );
                 ////////////////////tibiale////////////////////////////////////////////////////////////////////////////
                 changeTibiale.onChange(function(z){
-
                     coupe_tibiale = z;
                     if(result!=null){
                         scene.remove(result);
@@ -128,7 +182,6 @@ function init() {
                     result = subtract_bsp.toMesh( new THREE.MeshPhongMaterial({ shading: THREE.SmoothShading ,map: texture }) );
                     //result = subtract_bsp.toMesh( new THREE.MeshLambertMaterial({ shading: THREE.SmoothShading }) );
                     result.geometry.computeVertexNormals();
-                    console.log("debut d'ajout de la scene");
                     scene.add( result );
                     result.rotation.set(-1.3,0,0);
                     cube_geometry.dispose();
@@ -139,8 +192,6 @@ function init() {
 
                 ////////////////////////sagittale////////////////////////////////////////////////////////////////////////
                 changeSagittale.onChange(function(x){
-                  console.log("x",x);
-                  console.log("coupe_tibiale",coupe_tibiale);
                   coupe_sagittale = x;
                     if(result!=null){                      
                         scene.remove(result);
@@ -165,11 +216,8 @@ function init() {
                     var union_cube = cube_bsp.union(cube_bsp2);
                     var union_cube2 = union_cube.union(cube_bsp3);
                     subtract_bsp = tibia_bsp.subtract( union_cube2 );
-
                     result = subtract_bsp.toMesh( new THREE.MeshPhongMaterial({ shading: THREE.SmoothShading ,map: texture }) );
-               //result = subtract_bsp.toMesh( new THREE.MeshLambertMaterial({ shading: THREE.SmoothShading }) );
                 result.geometry.computeVertexNormals();
-                console.log("debut d'ajout de la scene");
                 scene.add( result );
                 result.rotation.set(-1.3,0,0);
                     cube_geometry.dispose();
@@ -208,11 +256,8 @@ function init() {
                     var union_cube = cube_bsp.union(cube_bsp2);
                     var union_cube2 = union_cube.union(cube_bsp3);
                     subtract_bsp = tibia_bsp.subtract( union_cube2 );
-
                     result = subtract_bsp.toMesh( new THREE.MeshPhongMaterial({ shading: THREE.SmoothShading ,map: texture }) );
-                    //result = subtract_bsp.toMesh( new THREE.MeshLambertMaterial({ shading: THREE.SmoothShading }) );
                     result.geometry.computeVertexNormals();
-                    console.log("debut d'ajout de la scene");
                     scene.add( result );
                     result.rotation.set(-1.3,0,0);
                     cube_geometry.dispose();
@@ -250,11 +295,8 @@ function init() {
                       var union_cube = cube_bsp.union(cube_bsp2);
                       var union_cube2 = union_cube.union(cube_bsp3);
                       subtract_bsp = tibia_bsp.subtract( union_cube2 );
-
                       result = subtract_bsp.toMesh( new THREE.MeshPhongMaterial({ shading: THREE.SmoothShading ,map: texture }) );
-                      //result = subtract_bsp.toMesh( new THREE.MeshLambertMaterial({ shading: THREE.SmoothShading }) );
                       result.geometry.computeVertexNormals();
-                      console.log("debut d'ajout de la scene");
                       scene.add( result );
                       result.rotation.set(-1.3,0,0);
                       cube_geometry.dispose();
